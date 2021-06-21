@@ -1,3 +1,4 @@
+import pandas as pd
 class Clean_Tweets:
     """
     The PEP8 Standard AMAZING!!!
@@ -21,7 +22,7 @@ class Clean_Tweets:
         drop duplicate rows
         """
         
-        ---
+        df.drop_duplicates(inplace=True)
         
         return df
     def convert_to_datetime(self, df:pd.DataFrame)->pd.DataFrame:
@@ -33,6 +34,7 @@ class Clean_Tweets:
         ----
         
         df = df[df['created_at'] >= '2020-12-31' ]
+        df['created_at'] = df['created_at']
         
         return df
     
