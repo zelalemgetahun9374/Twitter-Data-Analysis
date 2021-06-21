@@ -107,6 +107,10 @@ class TweetDfExtractor:
 
         return location
 
+    def find_lang(self) -> list:
+        lang = [x['lang'] for x in self.tweets_list]
+        return lang
+
     def get_tweet_df(self, save=False) -> pd.DataFrame:
         """required column to be generated you should be creative and add more features"""
 
