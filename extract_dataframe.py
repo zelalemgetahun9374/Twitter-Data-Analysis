@@ -93,8 +93,13 @@ class TweetDfExtractor:
         return favourite_count
 
     def find_retweet_count(self) -> list:
-        retweet_count = [x['retweeted_status']['retweet_count']
+        try:
+            retweet_count = [x['retweeted_status']['retweet_count']
                          for x in self.tweets_list]
+
+        except KeyError:
+            retweet_count = [None for x in self.tweets_list]
+        
         return retweet_count
 
     def find_hashtags(self) -> list:
