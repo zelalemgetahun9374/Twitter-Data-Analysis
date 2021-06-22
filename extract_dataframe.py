@@ -42,8 +42,13 @@ class TweetDfExtractor:
         return statuses_count
 
     def find_full_text(self) -> list:
-        text = [x['retweeted_status']['extended_tweet']['full_text']
+        try:
+            text = [x['retweeted_status']['extended_tweet']['full_text']
                 for x in self.tweets_list]
+        
+        except KeyError:
+            text = [x['text'] for x in self.tweets_list]
+            
         return text
 
     def find_sentiments(self, text) -> list:
