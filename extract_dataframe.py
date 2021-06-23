@@ -35,7 +35,6 @@ class TweetDfExtractor:
 
         self.tweets_list = tweets_list
 
-    # an example function
     def find_statuses_count(self) -> list:
         statuses_count = [x['user']['statuses_count']
                           for x in self.tweets_list]
@@ -48,8 +47,8 @@ class TweetDfExtractor:
                 text = x['retweeted_status']['extended_tweet']['full_text']
             except KeyError:
                 text = x['text']
-        texts.append(text)
-            
+            texts.append(text)
+        
         return texts
 
     def find_sentiments(self, text) -> list:
@@ -63,7 +62,6 @@ class TweetDfExtractor:
 
     def find_source(self) -> list:
         source = [x['source'] for x in self.tweets_list]
-
         return source
 
     def find_screen_name(self) -> list:
@@ -86,7 +84,7 @@ class TweetDfExtractor:
                 value = x['retweeted_status']['possibly_sensitive']
             except KeyError:
                 value = None
-        is_sensitive.append(value)
+            is_sensitive.append(value)
 
         return is_sensitive
 
@@ -97,7 +95,7 @@ class TweetDfExtractor:
                 value = x['retweeted_status']['favorite_count']
             except KeyError:
                 value = None
-        favourite_count.append(value)
+            favourite_count.append(value)
 
         return favourite_count
 
@@ -108,8 +106,8 @@ class TweetDfExtractor:
                 value = x['retweeted_status']['retweet_count']
             except KeyError:
                 value = None
-        retweet_count.append(value)
-        
+            retweet_count.append(value)
+
         return retweet_count
 
     def find_hashtags(self) -> list:
