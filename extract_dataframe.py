@@ -91,12 +91,13 @@ class TweetDfExtractor:
         return is_sensitive
 
     def find_favourite_count(self) -> list:
-        try:
-            favourite_count = [x['retweeted_status']['favorite_count']
-                           for x in self.tweets_list]
-
-        except KeyError:
-            favourite_count = [None for x in self.tweets_list]
+        favourite_count = []
+        for x in self.tweets_list:
+            try:
+                value = x['retweeted_status']['favorite_count']
+            except KeyError:
+                value = None
+        favourite_count.append(value)
 
         return favourite_count
 
