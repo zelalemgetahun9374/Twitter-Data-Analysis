@@ -10,11 +10,14 @@ class Clean_Tweets:
         self.df = df
         print('Automation in Action...!!!')
 
-    def drop_unwanted_column(self, df: pd.DataFrame, columns: list) -> pd.DataFrame:
+    def drop_unwanted_column(self, df: pd.DataFrame, column: list) -> pd.DataFrame:
         """
         remove unwanted columns
         """
-        df.drop(columns, inplace=True)
+        try:
+            df.drop(columns=column, inplace=True)
+        except:
+            pass
 
         return df
 
