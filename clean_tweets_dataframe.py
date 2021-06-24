@@ -10,14 +10,11 @@ class Clean_Tweets:
         self.df = df
         print('Automation in Action...!!!')
 
-    def drop_unwanted_column(self, df: pd.DataFrame) -> pd.DataFrame:
+    def drop_unwanted_column(self, df: pd.DataFrame, columns: list) -> pd.DataFrame:
         """
-        remove rows that has column names. This error originated from
-        the data collection stage.
+        remove unwanted columns
         """
-        unwanted_rows = df[df['retweet_count'] == 'retweet_count'].index
-        df.drop(unwanted_rows, inplace=True)
-        df = df[df['polarity'] != 'polarity']
+        df.drop(columns, inplace=True)
 
         return df
 
