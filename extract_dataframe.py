@@ -94,7 +94,7 @@ class TweetDfExtractor:
             try:
                 value = x['retweeted_status']['favorite_count']
             except KeyError:
-                value = None
+                value = x['favorite_count']
             favourite_count.append(value)
 
         return favourite_count
@@ -105,7 +105,7 @@ class TweetDfExtractor:
             try:
                 value = x['retweeted_status']['retweet_count']
             except KeyError:
-                value = None
+                value = x['retweet_count']
             retweet_count.append(value)
 
         return retweet_count
