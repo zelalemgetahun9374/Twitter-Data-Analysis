@@ -14,6 +14,7 @@ class Clean_Tweets:
         """
         remove unwanted columns
         """
+
         try:
             df.drop(columns=column, inplace=True)
         except:
@@ -26,7 +27,10 @@ class Clean_Tweets:
         drop duplicate rows
         """
 
-        df.drop_duplicates(inplace=True)
+        try:
+            df.drop_duplicates(inplace=True)
+        except:
+            pass
 
         return df
 
@@ -44,6 +48,7 @@ class Clean_Tweets:
         convert columns like polarity, subjectivity, retweet_count
         favorite_count etc to numbers
         """
+
         df["polarity"] = pd.to_numeric(df["polarity"])
         df["subjectivity"] = pd.to_numeric(df["subjectivity"])
         df["retweet_count"] = pd.to_numeric(df["retweet_count"])
