@@ -6,7 +6,7 @@ from wordcloud import WordCloud
 import plotly.express as px
 from add_data import db_execute_fetch
 
-st.set_page_config(page_title="Day 5", layout="wide")
+st.set_page_config(page_title="Tweets Data", layout="wide")
 
 def loadData():
     query = "select * from TweetInformation"
@@ -22,7 +22,7 @@ def selectHashTag():
 
 def selectLocAndAuth():
     df = loadData()
-    location = st.multiselect("choose Location of tweets", list(df['place_coordinate'].unique()))
+    location = st.multiselect("choose Location of tweets", list(df['place'].unique()))
     lang = st.multiselect("choose Language of tweets", list(df['language'].unique()))
 
     if location and not lang:
