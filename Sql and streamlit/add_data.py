@@ -9,13 +9,13 @@ def DBConnect(dbName=None):
     Parameters
     ----------
     dbName :
-        Default value = None)
+        Default value = None
 
     Returns
     -------
 
     """
-    conn = mysql.connect(host='localhost', user='root', password=os.getenv('mysqlPass'),
+    conn = mysql.connect(host='localhost', user='root', password="",
                          database=dbName, buffered=True)
     cur = conn.cursor()
     return conn, cur
@@ -32,11 +32,7 @@ def createDB(dbName: str) -> None:
     Parameters
     ----------
     dbName :
-        str:
-    dbName :
-        str:
-    dbName:str :
-
+        str
 
     Returns
     -------
@@ -53,11 +49,7 @@ def createTables(dbName: str) -> None:
     Parameters
     ----------
     dbName :
-        str:
-    dbName :
-        str:
-    dbName:str :
-
+        str
 
     Returns
     -------
@@ -88,11 +80,7 @@ def preprocess_df(df: pd.DataFrame) -> pd.DataFrame:
     Parameters
     ----------
     df :
-        pd.DataFrame:
-    df :
-        pd.DataFrame:
-    df:pd.DataFrame :
-
+        pd.DataFrame
 
     Returns
     -------
@@ -114,23 +102,11 @@ def insert_to_tweet_table(dbName: str, df: pd.DataFrame, table_name: str) -> Non
     Parameters
     ----------
     dbName :
-        str:
+        str
     df :
-        pd.DataFrame:
+        pd.DataFrame
     table_name :
-        str:
-    dbName :
-        str:
-    df :
-        pd.DataFrame:
-    table_name :
-        str:
-    dbName:str :
-
-    df:pd.DataFrame :
-
-    table_name:str :
-
+        str
 
     Returns
     -------
@@ -211,6 +187,6 @@ if __name__ == "__main__":
     emojiDB(dbName='tweets')
     createTables(dbName='tweets')
 
-    df = pd.read_csv('fintech.csv')
+    df = pd.read_csv('../data/processed_tweets.csv')
 
     insert_to_tweet_table(dbName='tweets', df=df, table_name='TweetInformation')
