@@ -27,10 +27,7 @@ class Clean_Tweets:
         drop duplicate rows
         """
 
-        try:
-            df.drop_duplicates(inplace=True)
-        except:
-            pass
+        df = df.drop_duplicates(inplace=True)
 
         return df
 
@@ -39,7 +36,7 @@ class Clean_Tweets:
         convert column to datetime
         """
 
-        df['created_at'] = pd.to_datetime(df['created_at'])
+        df['created_at'] = pd.to_datetime(df['created_at'], errors='coerce')
 
         return df
 
@@ -53,7 +50,7 @@ class Clean_Tweets:
         df["subjectivity"] = pd.to_numeric(df["subjectivity"])
         df["retweet_count"] = pd.to_numeric(df["retweet_count"])
         df["favorite_count"] = pd.to_numeric(df["favorite_count"])
-        df["friends_count "] = pd.to_numeric(df["polarity"])
+        df["friends_count"] = pd.to_numeric(df["friends_count"])
 
         return df
 
