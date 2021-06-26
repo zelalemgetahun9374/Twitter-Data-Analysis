@@ -50,7 +50,7 @@ class TweetDfExtractor:
         return texts
 
     def find_clean_text(self) -> list:
-            clean_text = [re.sub("[^a-zA-Z#@]", "", text) for text in self.find_full_text()]
+            clean_text = [re.sub("[^a-zA-Z0-9#@\s’,_]", "", text) for text in self.find_full_text()]
             clean_text = [re.sub("\s+", " ", text) for text in clean_text]
             return clean_text
 
@@ -122,21 +122,27 @@ class TweetDfExtractor:
         return retweet_count
 
     def find_hashtags(self) -> list:
-        hashtags = [re.findall("(#[A-Za-z]+[A-Za-z0-9-_]+)", str(text).lower())
+        hashtags = [" ".join(re.findall("(#[A-Za-z]+[A-Za-z0-9_-]+)", str(text).lower()))
             for text in self.find_clean_text()]
         return hashtags
 
     def find_mentions(self) -> list:
-        mentions = [re.findall("(@[A-Za-z0-9]+[A-Za-z0-9-_]+)", str(text).lower())
+        mentions = [" ".join(re.findall("(@[A-Za-z0-9_]+)", str(text).lower()))
             for text in self.find_clean_text()]
         return mentions
 
     def find_location(self) -> list:
-        try:
-            location = [x["user"]["location"] for x in self.tweets_list]
-        except TypeError:
-            location = "Not provided"
-
+        location = []
+        for x in self.tweets_list:
+            try:
+                value = x["user"]["location"]
+                if(value is None):
+                    value = "Not provided"
+                else:
+                    value = re.sub("[^a-zA-Z0-9\s-]", "", value)
+            except TypeError:
+                value = "Not provided"
+            location.append(value)
         return location
 
     def find_lang(self) -> list:
