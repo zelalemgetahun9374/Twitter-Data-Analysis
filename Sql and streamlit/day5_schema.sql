@@ -5,7 +5,6 @@ CREATE TABLE IF NOT EXISTS `TweetInformation`
     `id` INT NOT NULL AUTO_INCREMENT,
     `created_at` TEXT NOT NULL,
     `source` VARCHAR(200) NOT NULL,
-    `original_text` TEXT DEFAULT NULL,
     `clean_text` TEXT DEFAULT NULL,
     `sentiment` TEXT DEFAULT NULL,
     `polarity` FLOAT DEFAULT NULL,
