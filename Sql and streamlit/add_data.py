@@ -86,9 +86,9 @@ def preprocess_df(df: pd.DataFrame) -> pd.DataFrame:
     -------
 
     """
-    # cols_2_drop = ['possibly_sensitive']
+    cols_2_drop = ['original_text']
     try:
-        # df = df.drop(columns=cols_2_drop, axis=1)
+        df = df.drop(columns=cols_2_drop, axis=1)
         values={"hashtags": "", "user_mentions": ""}
         df = df.fillna(value=values)
         df = df.fillna(0)
@@ -119,11 +119,11 @@ def insert_to_tweet_table(dbName: str, df: pd.DataFrame, table_name: str) -> Non
     df = preprocess_df(df)
 
     for _, row in df.iterrows():
-        sqlQuery = f"""INSERT INTO {table_name} (created_at, source, original_text, clean_text, sentiment, polarity, subjectivity, language,
+        sqlQuery = f"""INSERT INTO {table_name} (created_at, source, clean_text, sentiment, polarity, subjectivity, language,
                     favorite_count, retweet_count, original_author, followers_count, friends_count, hashtags, user_mentions, place)
-             VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"""
+             VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"""
         data = (row[0], row[1], row[2], row[3], (row[4]), (row[5]), row[6], row[7], row[8], row[9], row[10], row[11],
-                row[12], row[13], row[14], row[15])
+                row[12], row[13], row[14])
 
         try:
             # Execute the SQL command
@@ -189,6 +189,5 @@ if __name__ == "__main__":
     createTables(dbName='tweets')
 
     df = pd.read_csv('../data/processed_tweets.csv')
-    print(df.head())
 
     insert_to_tweet_table(dbName='tweets', df=df.head(), table_name='TweetInformation')
