@@ -122,13 +122,21 @@ class TweetDfExtractor:
         return retweet_count
 
     def find_hashtags(self) -> list:
-        hashtags = [" ".join(re.findall("(#[A-Za-z]+[A-Za-z0-9_-]+)", str(text).lower()))
-            for text in self.find_clean_text()]
+        hashtags = []
+        for text in self.find_clean_text():
+            value = " ".join(re.findall("(#[A-Za-z]+[A-Za-z0-9_-]+)", str(text).lower()))
+            if value == "":
+                value = " "
+            hashtags.append(value)
         return hashtags
 
     def find_mentions(self) -> list:
-        mentions = [" ".join(re.findall("(@[A-Za-z0-9_]+)", str(text).lower()))
-            for text in self.find_clean_text()]
+        mentions = []
+        for text in self.find_clean_text():
+            value = " ".join(re.findall("(@[A-Za-z0-9_]+)", str(text).lower()))
+            if value == "":
+                value = " "
+            mentions.append(value)
         return mentions
 
     def find_location(self) -> list:
@@ -136,12 +144,8 @@ class TweetDfExtractor:
         for x in self.tweets_list:
             try:
                 value = x["user"]["location"]
-                if(value is None):
-                    value = "Not provided"
-                else:
-                    value = re.sub("[^a-zA-Z0-9\s-]", "", value)
             except TypeError:
-                value = "Not provided"
+                value = None
             location.append(value)
         return location
 

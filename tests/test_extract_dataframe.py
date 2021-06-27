@@ -81,15 +81,15 @@ class TestTweetDfExtractor(unittest.TestCase):
         self.assertEqual(self.df.find_retweet_count(), [612, 92, 1, 899, 20])
 
     def test_find_hashtags(self):
-        self.assertEqual(self.df.find_hashtags(), ['', '', '#red4research', '#covid19', ''])
+        self.assertEqual(self.df.find_hashtags(), [' ', ' ', '#red4research', '#covid19', ' '])
 
     def test_find_mentions(self):
         self.assertEqual(self.df.find_mentions(), [
-            '@whoafro @jriggers', '', '@research2note @nhsrdforum', '', '@texaschildrens @biological_e'])
+            '@whoafro @jriggers', ' ', '@research2note @nhsrdforum', ' ', '@texaschildrens @biological_e'])
 
     def test_find_location(self):
         self.assertEqual(self.df.find_location(), [
-            'Mass', 'Edinburgh Scotland', 'Not provided', 'Not provided', 'United Kingdom'])
+            'Mass', 'Edinburgh, Scotland', None, None, 'United Kingdom'])
 
 
 if __name__ == '__main__':

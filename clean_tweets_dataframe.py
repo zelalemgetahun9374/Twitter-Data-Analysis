@@ -1,4 +1,5 @@
 import pandas as pd
+import re
 
 class Clean_Tweets:
     """
@@ -9,7 +10,7 @@ class Clean_Tweets:
         self.df = df
         print('Automation in Action...!!!')
 
-    def drop_unwanted_column(self, df: pd.DataFrame, columns: list) -> pd.DataFrame:
+    def drop_unwanted_columns(self, df: pd.DataFrame, columns: list) -> pd.DataFrame:
         """
         remove unwanted columns
         """
@@ -58,3 +59,38 @@ class Clean_Tweets:
         df = df.drop(df[df['lang'] != 'en'].index)
 
         return df
+
+    def fill_missing(self, df: pd.DataFrame, column: str, value):
+        """
+        fill null values of a specific column with the provided value
+        """
+
+        df[column] = df[column].fillna(value)
+
+        return df
+
+    def replace_empty_string(self, df:pd.DataFrame, column: str, value: str):
+        """
+        replace empty sttrings in a specific column with the provided value
+        """
+
+        df[column] = df[column].apply(lambda x: value if x == "" else x)
+
+        return df
+
+    def remove_characters(self, df: pd.DataFrame, column: str):
+        """
+        removes non-alphanumeric characters with the exception of underscore hyphen and space
+        from the specified column
+        """
+
+        df[column] = df[column].apply(lambda text: re.sub("[^a-zA-Z0-9\s_-]", "", text))
+
+        return df
+
+    def extract_device_name(self, source: str):
+        """
+        returns device name from source text
+        """
+        res = re.split('<|>', source)[2].strip()
+        return res
