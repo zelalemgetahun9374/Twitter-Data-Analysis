@@ -1,6 +1,6 @@
+DROP TABLE IF EXISTS `TweetInformation`;
 
-
-CREATE TABLE IF NOT EXISTS `TweetInformation` 
+CREATE TABLE IF NOT EXISTS `TweetInformation`
 (
     `id` INT NOT NULL AUTO_INCREMENT,
     `created_at` TEXT NOT NULL,
@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS `TweetInformation`
     `original_author` TEXT DEFAULT NULL,
     `followers_count` INT DEFAULT NULL,
     `friends_count` INT DEFAULT NULL,
+    `possibly_sensitive` TEXT DEFAULT NULL,
     `hashtags` TEXT DEFAULT NULL,
     `user_mentions` TEXT DEFAULT NULL,
     `place` TEXT DEFAULT NULL,
