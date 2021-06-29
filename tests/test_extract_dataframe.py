@@ -38,8 +38,10 @@ class TestTweetDfExtractor(unittest.TestCase):
         self.assertEqual(self.df.find_full_text(), text)
 
     def test_find_sentiments(self):
-        self.assertEqual(self.df.find_sentiments(self.df.find_full_text()), ([0.16666666666666666, 0.13333333333333333, 0.3166666666666667, 0.08611111111111111, 0.27999999999999997], [
-                         0.18888888888888888, 0.45555555555555555, 0.48333333333333334, 0.19722222222222224, 0.6199999999999999]))
+        self.assertEqual(self.df.find_sentiments(self.df.find_full_text()), (
+            [0.16666666666666666, 0.13333333333333333, 0.3166666666666667, 0.08611111111111111, 0.27999999999999997],
+            [0.18888888888888888, 0.45555555555555555, 0.48333333333333334, 0.19722222222222224, 0.6199999999999999], 
+            ['positive', 'positive', 'positive', 'positive', 'positive']))
 
     def test_find_created_time(self):
         created_at = ['Fri Jun 18 17:55:49 +0000 2021', 'Fri Jun 18 17:55:59 +0000 2021', 'Fri Jun 18 17:56:07 +0000 2021',
@@ -79,16 +81,15 @@ class TestTweetDfExtractor(unittest.TestCase):
         self.assertEqual(self.df.find_retweet_count(), [612, 92, 1, 899, 20])
 
     def test_find_hashtags(self):
-        self.assertEqual(self.df.find_hashtags(), [
-                         [], [], [{'text': 'red4research', 'indices': [103, 116]}], [], []])
+        self.assertEqual(self.df.find_hashtags(), [' ', ' ', '#red4research', '#covid19', ' '])
 
     def test_find_mentions(self):
-        self.assertEqual(self.df.find_mentions(), [[{'screen_name': 'TelGlobalHealth', 'name': 'Telegraph Global Health Security', 'id': 1149218984346230784, 'id_str': '1149218984346230784', 'indices': [3, 19]}, {'screen_name': 'WHOAFRO', 'name': 'WHO African Region', 'id': 544389588, 'id_str': '544389588', 'indices': [102, 110]}], [{'screen_name': 'globalhlthtwit', 'name': 'Anthony Costello', 'id': 83440337, 'id_str': '83440337', 'indices': [3, 18]}], [{'screen_name': 'NHSRDForum', 'name': 'NHS R&D Forum', 'id': 1381499726, 'id_str': '1381499726', 'indices': [
-                         3, 14]}, {'screen_name': 'Research2note', 'name': 'Research2note', 'id': 734054113940508672, 'id_str': '734054113940508672', 'indices': [26, 40]}, {'screen_name': 'NHSRDForum', 'name': 'NHS R&D Forum', 'id': 1381499726, 'id_str': '1381499726', 'indices': [124, 135]}], [{'screen_name': 'HighWireTalk', 'name': 'The HighWire', 'id': 851985789072408576, 'id_str': '851985789072408576', 'indices': [3, 16]}], [{'screen_name': 'PeterHotez', 'name': 'Prof Peter Hotez MD PhD', 'id': 593289567, 'id_str': '593289567', 'indices': [3, 14]}]])
+        self.assertEqual(self.df.find_mentions(), [
+            '@whoafro @jriggers', ' ', '@research2note @nhsrdforum', ' ', '@texaschildrens @biological_e'])
 
     def test_find_location(self):
         self.assertEqual(self.df.find_location(), [
-                         'Mass', 'Edinburgh, Scotland', None, None, 'United Kingdom'])
+            'Mass', 'Edinburgh, Scotland', None, None, 'United Kingdom'])
 
 
 if __name__ == '__main__':

@@ -1,5 +1,5 @@
 import pandas as pd
-
+import re
 
 class Clean_Tweets:
     """
@@ -10,29 +10,23 @@ class Clean_Tweets:
         self.df = df
         print('Automation in Action...!!!')
 
-    def drop_unwanted_column(self, df: pd.DataFrame, column: list) -> pd.DataFrame:
+    def drop_unwanted_columns(self, df: pd.DataFrame, columns: list) -> pd.DataFrame:
         """
         remove unwanted columns
         """
-
         try:
-            df.drop(columns=column, inplace=True)
+            for column in columns:
+                if(column in df.columns):
+                    df.drop(columns=column, inplace=True)
         except:
             pass
 
-        return df
-
-    def drop_duplicate(self, df: pd.DataFrame) -> pd.DataFrame:
+    def drop_duplicates(self, df: pd.DataFrame) -> pd.DataFrame:
         """
         drop duplicate rows
         """
 
-        try:
-            df.drop_duplicates(inplace=True)
-        except:
-            pass
-
-        return df
+        df.drop_duplicates(inplace=True)
 
     def convert_to_datetime(self, df: pd.DataFrame) -> pd.DataFrame:
         """
@@ -53,7 +47,7 @@ class Clean_Tweets:
         df["subjectivity"] = pd.to_numeric(df["subjectivity"])
         df["retweet_count"] = pd.to_numeric(df["retweet_count"])
         df["favorite_count"] = pd.to_numeric(df["favorite_count"])
-        df["friends_count "] = pd.to_numeric(df["polarity"])
+        df["friends_count"] = pd.to_numeric(df["friends_count"])
 
         return df
 
@@ -65,3 +59,38 @@ class Clean_Tweets:
         df = df.drop(df[df['lang'] != 'en'].index)
 
         return df
+
+    def fill_missing(self, df: pd.DataFrame, column: str, value):
+        """
+        fill null values of a specific column with the provided value
+        """
+
+        df[column] = df[column].fillna(value)
+
+        return df
+
+    def replace_empty_string(self, df:pd.DataFrame, column: str, value: str):
+        """
+        replace empty sttrings in a specific column with the provided value
+        """
+
+        df[column] = df[column].apply(lambda x: value if x == "" else x)
+
+        return df
+
+    def remove_characters(self, df: pd.DataFrame, column: str):
+        """
+        removes non-alphanumeric characters with the exception of underscore hyphen and space
+        from the specified column
+        """
+
+        df[column] = df[column].apply(lambda text: re.sub("[^a-zA-Z0-9\s_-]", "", text))
+
+        return df
+
+    def extract_device_name(self, source: str):
+        """
+        returns device name from source text
+        """
+        res = re.split('<|>', source)[2].strip()
+        return res
