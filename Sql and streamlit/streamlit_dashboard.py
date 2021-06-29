@@ -11,24 +11,54 @@ from add_data import db_execute_fetch
 st.set_page_config(page_title="Tweets Data", layout="wide")
 
 # cache the result so that it doesn't load everytime
-@st.cache
+@st.cache()
 def loadData():
     query = "select * from TweetInformation"
     df = db_execute_fetch(query, dbName="tweets", rdf=True)
     return df
 
-def displayData(df):
-    hashTags = st.sidebar.multiselect("choose combaniation of hashtags", list(df['hashtags'].unique()))
-    location = st.sidebar.multiselect("choose Location of tweets", list(df['place'].unique()))
-    source = st.sidebar.multiselect("choose source of tweets", list(df['source'].unique()))
+def list_of_hashtags(df):
+    hashtags_list_df = df.loc[df["hashtags"] != " "]
+    hashtags_list_df = hashtags_list_df['hashtags']
+    flattened_hashtags = []
+    for hashtags_list in hashtags_list_df:
+        hashtags_list = hashtags_list.split(" ")
+        for hashtag in hashtags_list:
+            flattened_hashtags.append(hashtag)
+    flattened_hashtags_df = pd.DataFrame(flattened_hashtags, columns=['hashtags'])
 
+    return list(flattened_hashtags_df["hashtags"].unique())
+
+def list_of_user_mentions(df):
+    user_mentions_list_df = df.loc[df["user_mentions"] != " "]
+    user_mentions_list_df = user_mentions_list_df['user_mentions']
+    flattened_user_mentions = []
+    for user_mentions_list in user_mentions_list_df:
+        user_mentions_list = user_mentions_list.split(" ")
+        for user_mentions in user_mentions_list:
+            flattened_user_mentions.append(user_mentions)
+    flattened_user_mentions_df = pd.DataFrame(flattened_user_mentions, columns=['user_mentions'])
+
+    return list(flattened_user_mentions_df["user_mentions"].unique())
+
+def displayData(df):
+    st.sidebar.title("Filter tweets data")
+    hashTags = st.sidebar.multiselect("Choose hashtags", list_of_hashtags(df))
+    location = st.sidebar.multiselect("Choose location of tweets", list(df['place'].unique()))
+    source = st.sidebar.multiselect("Choose source of tweets", list(df['source'].unique()))
+    # user_mentions = st.sidebar.multiselect("Choose user mentions", list_of_user_mentions(df))
+
+    st.write("To order the data by a certain column click on the name of the column.")
     if hashTags:
-        df = df[np.isin(df, hashTags).any(axis=1)].reset_index(drop=True)
+        df = df[df["hashtags"].str.contains('|'.join(hashTags))].reset_index(drop=True)
     if location:
         df = df[np.isin(df, location).any(axis=1)].reset_index(drop=True)
     if source:
         df = df[np.isin(df, source).any(axis=1)].reset_index(drop=True)
+    # if user_mentions:
+    #     df = df[df["user_mentions"].str.contains('|'.join(user_mentions))].reset_index(drop=True)
     st.write(df)
+
 
 def selectHashTag(df):
     hashTags = st.multiselect("choose combaniation of hashtags", list(df['hashtags'].unique()))
@@ -61,7 +91,8 @@ def barChart(data, title, X, Y):
     st.altair_chart(msgChart, use_container_width=True)
 
 def wordCloud(df):
-    choice = st.radio("choose a column", ["Sentiment", "Possibly sensitive"])
+    st.markdown("# WordCloud")
+    choice = st.radio("Choose a column", ["Sentiment", "Possibly sensitive"])
     if choice == "Sentiment":
         sentiment = st.selectbox("Category", list(df['sentiment'].unique()))
         if sentiment:
@@ -74,7 +105,7 @@ def wordCloud(df):
 
         wc = WordCloud(width=650, height=450, background_color='white', min_font_size=5).generate(cleanText)
         if sentiment:
-            st.title(f"{sentiment.capitalize()} Tweets Word Cloud")
+            st.markdown(f"## **{sentiment.capitalize()} Tweets Word Cloud**")
         else:
             st.title("Tweet Text Word Cloud")
     else:
@@ -92,6 +123,7 @@ def wordCloud(df):
         #     st.title(f"{sensitive.capitalize()} Tweets Word Cloud")
         # else:
         #     st.title("Tweet Text Word Cloud")
+    st.write("\n")
     st.image(wc.to_array())
 
 def stBarChart(df):
@@ -137,7 +169,6 @@ df = loadData()
 st.title("Data Display")
 st.write("\n")
 displayData(df)
-st.title("Data Visualizations")
 wordCloud(df)
 with st.beta_expander("Show More Graphs"):
     stBarChart(df)
