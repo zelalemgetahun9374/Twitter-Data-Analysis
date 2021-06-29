@@ -10,6 +10,7 @@ from add_data import db_execute_fetch
 
 st.set_page_config(page_title="Tweets Data", layout="wide")
 
+# cache the result so that it doesn't load everytime
 @st.cache
 def loadData():
     query = "select * from TweetInformation"
@@ -60,20 +61,37 @@ def barChart(data, title, X, Y):
     st.altair_chart(msgChart, use_container_width=True)
 
 def wordCloud(df):
-    sentiment = st.selectbox("choose category of sentiment", list(df['sentiment'].unique()))
-    if sentiment:
-        df = df[np.isin(df, sentiment).any(axis=1)].reset_index(drop=True)
-    cleanText = ''
-    for text in df['clean_text']:
-        tokens = str(text).lower().split()
+    choice = st.radio("choose a column", ["Sentiment", "Possibly sensitive"])
+    if choice == "Sentiment":
+        sentiment = st.selectbox("Category", list(df['sentiment'].unique()))
+        if sentiment:
+            df = df[np.isin(df, sentiment).any(axis=1)].reset_index(drop=True)
+        cleanText = ''
+        for text in df['clean_text']:
+            tokens = str(text).lower().split()
 
-        cleanText += " ".join(tokens) + " "
+            cleanText += " ".join(tokens) + " "
 
-    wc = WordCloud(width=650, height=450, background_color='white', min_font_size=5).generate(cleanText)
-    if sentiment:
-        st.title(f"{sentiment.capitalize()} Tweets Word Cloud")
+        wc = WordCloud(width=650, height=450, background_color='white', min_font_size=5).generate(cleanText)
+        if sentiment:
+            st.title(f"{sentiment.capitalize()} Tweets Word Cloud")
+        else:
+            st.title("Tweet Text Word Cloud")
     else:
-        st.title("Tweet Text Word Cloud")
+        sensitive = st.selectbox("Category", list(df['possibly_sensitive'].unique()))
+        if sensitive:
+            df = df[np.isin(df, sensitive).any(axis=1)].reset_index(drop=True)
+        cleanText = ''
+        for text in df['clean_text']:
+            tokens = str(text).lower().split()
+
+            cleanText += " ".join(tokens) + " "
+
+        wc = WordCloud(width=650, height=450, background_color='white', min_font_size=5).generate(cleanText)
+        # if sensitive:
+        #     st.title(f"{sensitive.capitalize()} Tweets Word Cloud")
+        # else:
+        #     st.title("Tweet Text Word Cloud")
     st.image(wc.to_array())
 
 def stBarChart(df):
