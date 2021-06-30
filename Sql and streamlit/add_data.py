@@ -171,7 +171,7 @@ def db_execute_fetch(*args, many=False, tablename='', rdf=True, **kwargs) -> pd.
     # get row count and show info
     nrow = cursor1.rowcount
     if tablename:
-        print(f"{nrow} recrods fetched from {tablename} table")
+        print(f"{nrow} records fetched from {tablename} table")
 
     cursor1.close()
     connection.close()
