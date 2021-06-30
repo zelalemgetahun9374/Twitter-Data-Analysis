@@ -76,7 +76,7 @@ def selectHashTag(df):
 def wordCloud(df):
     st.markdown("## **WordCloud**")
     st.write("### 1.  A word cloud for positve, negative and neutral tweets.")
-    sentiment = st.selectbox("Select a sentiment category", list(df['sentiment'].unique()))
+    sentiment = st.selectbox("Select a category", list(df['sentiment'].unique()))
     if sentiment:
         df = df[np.isin(df, sentiment).any(axis=1)].reset_index(drop=True)
     cleanText = ''
@@ -86,10 +86,6 @@ def wordCloud(df):
         cleanText += " ".join(tokens) + " "
 
     wc = WordCloud(width=650, height=450, background_color='white', min_font_size=5).generate(cleanText)
-    if sentiment:
-        st.markdown(f"### **{sentiment.capitalize()} Tweets Word Cloud**")
-    else:
-        st.title("Tweet Text Word Cloud")
     st.image(wc.to_array())
     st.write("### 2.  A word cloud for possibly sensitve or not tweets.")
 
@@ -113,25 +109,25 @@ def advanced_exploration(df, suppress_st_warning=True):
 
 
 def plotly_bar_sentiment_friends(df):
-    st.markdown("## 1. Sentiment vs Friends count")
+    st.markdown("## **1. Sentiment vs Friends count**")
     st.write("The following bar chart shows the number of friends based on the sentiment of each tweet.")
-    fig = px.bar(df, x='sentiment', y='friends_count', color="possibly_sensitive", barmode='group', width=1000)
+    fig = px.bar(df, x='sentiment', y='friends_count', color="possibly_sensitive", barmode='group', width=900)
     st.plotly_chart(fig)
 
 def plotly_bar_original_author_retweet(df):
     count = list(df["original_author"].value_counts().head(10).index)
     df = df[np.isin(df, count).any(axis=1)]
-    st.markdown("## 3. Original authors vs Retweet count")
+    st.markdown("## **3. Original authors vs Retweet count**")
     st.write("The following bar chart shows the number of retweets for the top 10 original authors. Here we can understand that even if PuneUpdater is the highest original author of all, he has very few retweets.")
-    fig = px.bar(df, x='original_author', y='retweet_count', color="sentiment", barmode='group', width=1000)
+    fig = px.bar(df, x='original_author', y='retweet_count', color="sentiment", barmode='group', width=900)
     st.plotly_chart(fig)
 
 def plotly_bar_source_retweet(df):
     count = list(df["source"].value_counts().head(5).index)
     df = df[np.isin(df, count).any(axis=1)]
-    st.markdown("## 4. Source vs Retweet count")
+    st.markdown("## **4. Source vs Retweet count**")
     st.write("The following bar chart shows the number of retweets for the top 5 sources.")
-    fig = px.bar(df, x='source', y='retweet_count', color="sentiment", barmode='group', width=1000)
+    fig = px.bar(df, x='source', y='retweet_count', color="sentiment", barmode='group', width=900)
     st.plotly_chart(fig)
 
 def plotly_facet(df):
@@ -139,7 +135,7 @@ def plotly_facet(df):
     df = df[np.isin(df, source).any(axis=1)]
     fig = px.bar(df, x="sentiment", y="friends_count",
              facet_row="possibly_sensitive", facet_col="source", width=1000, height=600)
-    st.markdown("## 5. Sentiment vs Retweet count vs Source vs Possibly sensitive")
+    st.markdown("## **5. Sentiment vs Retweet count vs Source vs Possibly sensitive**")
     st.write("The following faceted subplots show the number of friends based on sentiments and sensetiveness for the top 3 sources grouped .")
     st.plotly_chart(fig)
 
@@ -149,7 +145,7 @@ def authorPie(df):
     dflocationCount.loc[dflocationCount['Tweet_count'] < 5, 'original_author'] = 'Other authors'
     fig = px.pie(dflocationCount, values='Tweet_count', names='original_author', width=800, height=500)
     fig.update_traces(textposition='inside', textinfo='percent+label')
-    st.markdown("## 2. Original authors")
+    st.markdown("## **2. Original authors**")
     st.write("The following pie chart shows top original authors based on their count of tweets. Note that authors with less than 5 tweets are grouped as other authors.")
     st.plotly_chart(fig)
 
